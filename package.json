@@ -1,9 +1,9 @@
 {
-  "name": "vue-element-admin",
-  "version": "4.2.1",
-  "description": "A magical vue admin. An out-of-box UI solution for enterprise applications. Newest development stack of vue. Lots of awesome features",
-  "author": "Pan <panfree23@gmail.com>",
-  "license": "MIT",
+  "name": "epoch-web",
+  "version": "1.0.0",
+  "description": "epoch 服务平台前端",
+  "author": "Marshal",
+  "license": "Apache 2.0",
   "scripts": {
     "dev": "vue-cli-service serve",
     "build:prod": "vue-cli-service build",
@@ -37,10 +37,10 @@
   ],
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/PanJiaChen/vue-element-admin.git"
+    "url": "https://github.com/Marshal1996/epoch.git"
   },
   "bugs": {
-    "url": "https://github.com/PanJiaChen/vue-element-admin/issues"
+    "url": "https://github.com/Marshal1996/epoch/issues"
   },
   "dependencies": {
     "axios": "0.18.1",
@@ -49,7 +49,7 @@
     "driver.js": "0.9.5",
     "dropzone": "5.5.1",
     "echarts": "4.2.1",
-    "element-ui": "2.7.0",
+    "element-ui": "2.13.0",
     "file-saver": "2.0.1",
     "fuse.js": "3.4.4",
     "js-cookie": "2.2.0",
@@ -85,7 +85,7 @@
     "chalk": "2.4.2",
     "chokidar": "2.1.5",
     "connect": "3.6.6",
-    "eslint": "5.15.3",
+    "eslint": "6.8.0",
     "eslint-plugin-vue": "5.2.2",
     "html-webpack-plugin": "3.2.0",
     "husky": "1.3.1",
