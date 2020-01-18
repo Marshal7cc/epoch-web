@@ -2,7 +2,7 @@ import request from '@/utils/request'
 
 export function query(pagination, queryParam) {
   return request({
-    url: '/account/role/query',
+    url: '/system/role/query',
     method: 'post',
     params: {
       page: pagination.page,
@@ -14,7 +14,7 @@ export function query(pagination, queryParam) {
 
 export function submit(dto) {
   return request({
-    url: '/account/role/submit',
+    url: '/system/role/submit',
     method: 'post',
     data: dto
   })
@@ -22,7 +22,7 @@ export function submit(dto) {
 
 export function remove(rows) {
   return request({
-    url: '/account/role/remove',
+    url: '/system/role/remove',
     method: 'post',
     data: rows
   })
