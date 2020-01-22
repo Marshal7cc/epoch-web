@@ -1,5 +1,5 @@
 module.exports = {
-  title: 'Epoch',
+  title: 'epoch',
   showSettings: false,
   tagsView: true,
   fixedHeader: true,

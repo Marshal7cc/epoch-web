@@ -90,7 +90,6 @@ router.beforeEach((to, from, next) => {
     const token = localStorage.getItem('access_token')
     const userRouter = JSON.parse(localStorage.getItem('user_route'))
     if (token) {
-      debugger
       if (!asyncRoutes) {
         if (!userRouter) {
           getUserMenu().then((res) => {

@@ -1,10 +1,15 @@
 <template>
   <div class="login-container">
+    <div class="login-info">
+        <div class="login-img"></div>
+        <div class="title">EPOCH 微服务平台</div>
+        <div class="sub-title">分享生活，留住感动</div>
+    </div>
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on"
              label-position="left">
 
       <div class="title-container">
-        <h3 class="title">Login Form</h3>
+        <h3 class="title">EPOCH 登录</h3>
       </div>
 
       <el-form-item prop="username">
@@ -45,7 +50,7 @@
           </span>
         </el-form-item>
       </el-tooltip>
-      <el-button :loading="loading" type="primary" style="width:100%;margin-bottom:30px;"
+      <el-button :loading="loading" type="primary" style="width:70%;margin-bottom:30px;margin-left:15%"
                  @click.native.prevent="handleLogin">登录
       </el-button>
     </el-form>

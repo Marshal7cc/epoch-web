@@ -10,7 +10,7 @@ import adminDashboard from './admin'
 import editorDashboard from './editor'
 
 export default {
-  name: 'Dashboard',
+  name: 'EPOCH',
   components: { adminDashboard, editorDashboard },
   data() {
     return {
