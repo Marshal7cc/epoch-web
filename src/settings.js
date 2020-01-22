@@ -1,9 +1,9 @@
 module.exports = {
-  title: 'epoch',
-  showSettings: true,
+  title: 'Epoch',
+  showSettings: false,
   tagsView: true,
-  fixedHeader: false,
-  sidebarLogo: false,
+  fixedHeader: true,
+  sidebarLogo: true,
   errorLog: 'production',
   basicAuthorization: 'Basic RVBPQ0g6MTIzNDU2'
 }

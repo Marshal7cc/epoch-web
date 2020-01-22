@@ -38,18 +38,11 @@ export function submit(dto) {
     method: 'post',
     data: {
       'generateMethod': 'zip',
-      'packagePath': 'sys',
+      'packagePath': 'system',
       'parentPackagePath': 'com.marshal.epoch',
       'projectPath': 'D:\\',
-      'targetName': 'sys_user'
+      'targetName': 'sys_menu'
     }
   })
 }
 
-export function remove(rows) {
-  return request({
-    url: '/base/role/remove',
-    method: 'post',
-    data: rows
-  })
-}

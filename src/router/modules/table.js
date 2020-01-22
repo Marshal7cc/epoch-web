@@ -2,21 +2,21 @@
 
 import Layout from '@/layout'
 
-const tableRouter = {
+const tableRouter = [{
   path: '/table',
   component: Layout,
   redirect: '/table/complex-table',
   name: 'Table',
   meta: {
-    title: 'Table',
+    title: '菜单名称',
     icon: 'table'
   },
   children: [
     {
-      path: 'dynamic-table',
+      path: 'dynamic-table1',
       component: () => import('@/views/table/dynamic-table/index'),
-      name: 'DynamicTable',
-      meta: { title: 'Dynamic Table' }
+      name: 'DynamicTable1',
+      meta: { title: 'Dynamic Table1' }
     },
     {
       path: 'drag-table',
@@ -37,5 +37,5 @@ const tableRouter = {
       meta: { title: 'Complex Table' }
     }
   ]
-}
+}]
 export default tableRouter
