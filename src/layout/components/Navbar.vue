@@ -16,6 +16,7 @@
           <size-select id="size-select" class="right-menu-item hover-effect" />
         </el-tooltip>
 
+        <lang-select class="right-menu-item hover-effect" />
       </template>
 
       <el-dropdown class="avatar-container right-menu-item hover-effect" trigger="click">
@@ -51,6 +52,7 @@ import Breadcrumb from '@/components/Breadcrumb'
 import Hamburger from '@/components/Hamburger'
 import ErrorLog from '@/components/ErrorLog'
 import Screenfull from '@/components/Screenfull'
+import LangSelect from '@/components/LangSelect'
 import SizeSelect from '@/components/SizeSelect'
 import Search from '@/components/HeaderSearch'
 import { clear } from '@/utils/auth'
@@ -62,6 +64,7 @@ export default {
     ErrorLog,
     Screenfull,
     SizeSelect,
+    LangSelect,
     Search
   },
   computed: {

@@ -5,7 +5,7 @@ import request from '@/utils/request'
  */
 export function query(pagination, queryParam) {
   return request({
-    url: '/system/prompt/query',
+    url: '/system/lang/query',
     method: 'post',
     params: {
       page: pagination.page,
@@ -21,7 +21,7 @@ export function query(pagination, queryParam) {
  */
 export function submit(dto) {
   return request({
-    url: '/system/prompt/submit',
+    url: '/system/lang/submit',
     method: 'post',
     data: dto
   })
@@ -33,7 +33,7 @@ export function submit(dto) {
  */
 export function remove(rows) {
   return request({
-    url: '/system/prompt/remove',
+    url: '/system/lang/remove',
     method: 'post',
     data: rows
   })
@@ -45,7 +45,7 @@ export function remove(rows) {
  */
 export function queryById(id) {
   return request({
-    url: '/system/prompt/queryById',
+    url: '/system/lang/queryById',
     method: 'get',
     params: {
       'id': id
@@ -54,16 +54,11 @@ export function queryById(id) {
 }
 
 /**
- * 根据语言查找全部
- * @param langCode
+ * 查询用作下拉框
  */
-export function i18n(langCode) {
+export function queryForOptions() {
   return request({
-    url: '/system/prompt/i18n',
-    method: 'get',
-    params: {
-      'langCode': langCode
-    }
+    url: '/system/lang/queryForOptions',
+    method: 'get'
   })
 }
-

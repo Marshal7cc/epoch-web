@@ -1,11 +1,15 @@
-import { query } from '@/api/system/prompt'
+import { i18n } from '@/api/system/prompt'
 
-const prompts = query()
+let epoch = {
+  // 'common-search': '新增'
+}
 
-// query().then(res => {
-//   prompts = res
-// })
+i18n('zh_CN').then(res => {
+  epoch = res.data
+})
+
+console.log(epoch)
 
 export default {
-  prompts
+  epoch
 }

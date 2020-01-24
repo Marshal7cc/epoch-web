@@ -1,23 +1,9 @@
 import variables from '@/styles/element-variables.scss'
 import defaultSettings from '@/settings'
+import cache from '@/utils/cache'
+import { getLanguage } from '@/lang/index'
 
 const { showSettings, tagsView, fixedHeader, sidebarLogo } = defaultSettings
-
-const state = {
-  theme: variables.theme,
-  showSettings: showSettings,
-  tagsView: tagsView,
-  fixedHeader: fixedHeader,
-  sidebarLogo: sidebarLogo
-}
-
-const mutations = {
-  CHANGE_SETTING: (state, { key, value }) => {
-    if (state.hasOwnProperty(key)) {
-      state[key] = value
-    }
-  }
-}
 
 const actions = {
   changeSetting({ commit }, data) {
@@ -27,8 +13,25 @@ const actions = {
 
 export default {
   namespaced: true,
-  state,
-  mutations,
+  state: {
+    theme: variables.theme,
+    showSettings: showSettings,
+    tagsView: tagsView,
+    fixedHeader: fixedHeader,
+    sidebarLogo: sidebarLogo,
+    language: getLanguage()
+  },
+  mutations: {
+    CHANGE_SETTING: (state, { key, value }) => {
+      if (state.hasOwnProperty(key)) {
+        state[key] = value
+      }
+    },
+    setLanguage: (state, language) => {
+      cache.save('lang', language)
+      state.language = language
+    }
+  },
   actions
 }
 
