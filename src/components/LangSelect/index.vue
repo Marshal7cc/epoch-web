@@ -1,7 +1,7 @@
 <template>
   <el-dropdown trigger="click" class="international" @command="handleSetLanguage">
     <div>
-      <svg-icon class-name="international-icon" icon-class="language" style="color: #a8a9a9;" />
+      <svg-icon class-name="international-icon" icon-class="language" style="color: #a8a9a9;"/>
     </div>
     <el-dropdown-menu slot="dropdown">
       <el-dropdown-item :disabled="language==='zh'" command="zh">
@@ -11,28 +11,46 @@
         English
       </el-dropdown-item>
       <el-dropdown-item :disabled="language==='ja'" command="ja">
-              日本語
+        日本語
       </el-dropdown-item>
     </el-dropdown-menu>
   </el-dropdown>
 </template>
 
 <script>
-export default {
-  computed: {
-    language() {
-      return this.$store.state.settings.language
-    }
-  },
-  methods: {
-    handleSetLanguage(lang) {
-      this.$i18n.locale = lang
-      this.$store.commit('settings/setLanguage', lang)
-      this.$message({
-        message: this.$t('tips.switchLanguageSuccess'),
-        type: 'success'
-      })
+  import { i18n } from '@/api/system/prompt'
+  import { getLanguage } from '@/lang/index'
+
+  export default {
+    name: 'langSelect',
+    created() {
+      this.initPrompt()
+    },
+    computed: {
+      language() {
+        return this.$store.state.settings.language
+      }
+    },
+    methods: {
+      handleSetLanguage(lang) {
+        this.$i18n.locale = lang
+        this.$store.commit('settings/setLanguage', lang)
+        this.$message({
+          message: this.$t('tips.switchLanguageSuccess'),
+          type: 'success'
+        })
+
+        let that = this
+        setTimeout(function() {
+          that.initPrompt()
+          location.reload()
+        }, 3500)
+      },
+      initPrompt() {
+        i18n(getLanguage()).then(res => {
+          localStorage.setItem('prompt', JSON.stringify(res.data))
+        })
+      }
     }
   }
-}
 </script>

@@ -19,7 +19,8 @@ export default {
     tagsView: tagsView,
     fixedHeader: fixedHeader,
     sidebarLogo: sidebarLogo,
-    language: getLanguage()
+    language: getLanguage(),
+    prompts: {}
   },
   mutations: {
     CHANGE_SETTING: (state, { key, value }) => {
@@ -30,6 +31,10 @@ export default {
     setLanguage: (state, language) => {
       cache.save('lang', language)
       state.language = language
+    },
+    setPrompt: (state, prompt) => {
+      cache.save('prompt', prompt)
+      state.prompt = prompt
     }
   },
   actions
