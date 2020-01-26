@@ -6,7 +6,7 @@ export default {
    */
   query: function query(pagination, queryParam) {
     return request({
-      url: '/system/lang/query',
+      url: '/hr/company/query',
       method: 'post',
       params: {
         page: pagination.page,
@@ -21,7 +21,7 @@ export default {
    */
   submit: function submit(dto) {
     return request({
-      url: '/system/lang/submit',
+      url: '/hr/company/submit',
       method: 'post',
       data: dto
     })
@@ -32,7 +32,7 @@ export default {
    */
   remove: function remove(rows) {
     return request({
-      url: '/system/lang/remove',
+      url: '/hr/company/remove',
       method: 'post',
       data: rows
     })
@@ -43,20 +43,11 @@ export default {
    */
   queryById: function queryById(id) {
     return request({
-      url: '/system/lang/queryById',
+      url: '/hr/company/queryById',
       method: 'get',
       params: {
         'id': id
       }
-    })
-  },
-  /**
-   * 查询用作下拉框
-   */
-  queryForOptions: function() {
-    return request({
-      url: '/system/lang/queryForOptions',
-      method: 'get'
     })
   }
 }

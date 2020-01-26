@@ -1,22 +1,24 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="queryParam.langName" placeholder="语言名称" style="width: 150px;" class="filter-item"/>
+      <el-input v-model="queryParam.promptCode" placeholder="描述代码" style="width: 150px;" class="filter-item"/>
+      <el-input v-model="queryParam.description" placeholder="描述" style="width: 150px;" class="filter-item"/>
+      <el-select v-model="queryParam.lang" placeholder="语言" clearable style="width: 150px" class="filter-item">
+        <el-option v-for="item in langOptions" :key="item.langId" :label="item.langName" :value="item.langId" />
+      </el-select>
 
-      <el-button plain class="filter-item" type="primary" icon="el-icon-search" @click="query">
+      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="query">
         {{ $t('epoch.btn-search') }}
       </el-button>
-      <el-button plain class="filter-item" type="info" icon="el-icon-refresh" @click="reset">
-        {{ $t('epoch.btn-reset') }}
-      </el-button>
-      <el-button plain class="filter-item" type="success" icon="el-icon-circle-plus-outline" @click="add">
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit"
+                 @click="add">
         {{ $t('epoch.btn-add') }}
       </el-button>
-      <el-button plain class="filter-item" type="warning" icon="el-icon-delete" @click="remove">
+      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-delete"
+                 @click="remove">
         {{ $t('epoch.btn-delete') }}
       </el-button>
     </div>
-
     <el-table
       :key="0"
       v-loading="loading"
@@ -30,14 +32,15 @@
       <el-table-column
         type="selection">
       </el-table-column>
-      <el-table-column label="语言代码" align="center">
+
+      <el-table-column label="代码" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.langCode }}</span>
+          <span>{{ scope.row.promptCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="语言名称" align="center">
+      <el-table-column label="语言" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.langName }}</span>
+          <span>{{ scope.row.lang }}</span>
         </template>
       </el-table-column>
       <el-table-column label="描述" align="center">
@@ -47,7 +50,8 @@
       </el-table-column>
       <el-table-column label="操作" align="center">
         <template slot-scope="{row}">
-          <el-button circle type="primary" icon="el-icon-edit" size="mini" @click="edit(row)">
+          <el-button type="primary" size="mini" @click="edit(row)">
+            编辑
           </el-button>
         </template>
       </el-table-column>
@@ -60,25 +64,26 @@
     <el-dialog :title="dialog.title" :visible.sync="dialog.visible">
       <el-form ref="dataForm" :model="dto" label-position="left" label-width="70px"
                style="width: 400px; margin-left:50px;">
-        <el-form-item label="语言代码" prop="langCode">
-          <el-input v-model="dto.langCode" class="filter-item" placeholder="语言代码">
+        <el-form-item label="代码" prop="roleCode">
+          <el-input v-model="dto.promptCode" class="filter-item" placeholder="代码">
           </el-input>
         </el-form-item>
-        <el-form-item label="语言名称" prop="langName">
-          <el-input v-model="dto.langName" class="filter-item" placeholder="语言名称">
-          </el-input>
+        <el-form-item label="语言" prop="语言">
+            <el-select v-model="dto.lang" class="filter-item" placeholder="语言">
+                <el-option v-for="item in langOptions" :key="item.langId" :label="item.langName" :value="item.langId" />
+            </el-select>
         </el-form-item>
-        <el-form-item label="描述" prop="langName">
+        <el-form-item label="描述" prop="roleName">
           <el-input v-model="dto.description" class="filter-item" placeholder="描述">
           </el-input>
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialog.visible = false">
-          {{ $t('epoch.btn-cancel') }}
+          取消
         </el-button>
-        <el-button @click="submit">
-          {{ $t('epoch.btn-save') }}
+        <el-button type="primary" @click="submit">
+          确认
         </el-button>
       </div>
     </el-dialog>
@@ -86,12 +91,13 @@
 </template>
 
 <script>
+  import base from "@/utils/base"
   import Pagination from '@/components/Pagination'
-  import base from '@/utils/base'
-  import langApi from '@/api/system/lang'
+  import {query, submit, remove, queryById} from '@/api/system/prompt'
+  import {queryForOptions} from '@/api/system/lang'
 
   export default {
-    components: { Pagination },
+    components: {Pagination},
     data() {
       return {
         rows: null,
@@ -106,43 +112,51 @@
         },
         queryParam: {},
         dto: {},
-        loading: true
+        loading: true,
+        langOptions: {}
       }
     },
     created() {
       this.query()
     },
+    mounted() {
+     queryForOptions().then(res=>{
+             this.langOptions = res.data.rows
+     })
+    },
     methods: {
       query() {
         this.loading = true
-        langApi.query(this.pagination, this.queryParam).then(response => {
+        query(this.pagination, this.queryParam).then(response => {
           base.parseResponse(response, this)
         })
       },
       reset() {
-        this.queryParam = {}
+        this.dto = {}
       },
       add() {
-        this.dto = {}
+        this.reset()
         this.dialog.visible = true
-        this.dialog.title = this.$t('epoch.btn-add')
+        this.dialog.title =  $t('epoch.btn-add')
       },
       edit(row) {
-        langApi.queryById(row.langId).then(res => {
-          this.dto = res.data
-        })
+        queryById(row.promptId).then(res=>{this.dto = res.data})
         this.dialog.visible = true
-        this.dialog.title = this.$t('epoch.btn-edit')
+        this.dialog.title = '编辑'
       },
       submit() {
-        langApi.submit(this.dto).then((response) => {
+        submit(this.dto).then((response) => {
           this.dialog.visible = false
           base.parseResponse(response, this)
           this.query()
         })
       },
       remove() {
-        base.remove(this, langApi)
+        base.removeCheck(this)
+        remove(this.$refs.dataGrid.selection).then((response) => {
+          base.parseResponse(response, this)
+          this.query()
+        })
       }
     }
   }

@@ -1,9 +1,9 @@
 <template>
   <div class="login-container">
     <div class="login-info">
-        <div class="login-img"></div>
-        <div class="title">EPOCH 微服务平台</div>
-        <div class="sub-title">分享生活，留住感动</div>
+      <div class="login-img"></div>
+      <div class="title">EPOCH 微服务平台</div>
+      <div class="sub-title">分享生活，留住感动</div>
     </div>
     <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on"
              label-position="left">
@@ -58,14 +58,14 @@
 </template>
 
 <script>
-  import {setToken} from "../../utils/auth";
-  import {validUsername} from '@/utils/validate'
+  import { setToken } from '../../utils/auth'
+  import { validUsername } from '@/utils/validate'
   import SocialSign from './components/SocialSignin'
-  import {login} from '@/api/login/login.js'
+  import { login } from '@/api/login/login.js'
 
   export default {
     name: 'Login',
-    components: {SocialSign},
+    components: { SocialSign },
     data() {
       const validateUsername = (rule, value, callback) => {
         if (!validUsername(value)) {
@@ -87,8 +87,8 @@
           password: '1'
         },
         loginRules: {
-          username: [{required: true, trigger: 'blur', validator: validateUsername}],
-          password: [{required: true, trigger: 'blur', validator: validatePassword}]
+          username: [{ required: true, trigger: 'blur', validator: validateUsername }],
+          password: [{ required: true, trigger: 'blur', validator: validatePassword }]
         },
         passwordType: 'password',
         capsTooltip: false,
@@ -99,7 +99,7 @@
     },
     watch: {
       $route: {
-        handler: function (route) {
+        handler: function(route) {
           const query = route.query
           if (query) {
             this.redirect = query.redirect
@@ -123,7 +123,7 @@
       // window.removeEventListener('storage', this.afterQRScan)
     },
     methods: {
-      checkCapslock({shiftKey, key} = {}) {
+      checkCapslock({ shiftKey, key } = {}) {
         if (key && key.length === 1) {
           if (shiftKey && (key >= 'a' && key <= 'z') || !shiftKey && (key >= 'A' && key <= 'Z')) {
             this.capsTooltip = true
@@ -152,8 +152,8 @@
               .then(res => {
                 if (res) {
                   this.loading = true
-                  setToken(res.token_type +' ' +res.access_token)
-                  this.$router.push({path: this.redirect || '/', query: this.otherQuery})
+                  setToken(res.token_type + ' ' + res.access_token)
+                  this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
                   this.loading = false
                 } else {
                   this.$message.error(res.message)

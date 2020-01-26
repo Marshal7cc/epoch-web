@@ -3,15 +3,15 @@
     <div class="filter-container">
       <el-input v-model="queryParam.roleName" placeholder="角色名称" style="width: 200px;" class="filter-item"/>
       <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="query">
-        查询
+        {{ $t('epoch.btn-search') }}
       </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit"
                  @click="add">
-        新增
+        {{ $t('epoch.btn-add') }}
       </el-button>
       <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-delete"
                  @click="remove">
-        删除
+        {{ $t('epoch.btn-delete') }}
       </el-button>
     </div>
     <el-table
@@ -124,7 +124,7 @@
       add() {
         this.reset()
         this.dialog.visible = true
-        this.dialog.title = '新增'
+        this.dialog.title =  $t('epoch.btn-add')
       },
       edit(row) {
         this.dto = Object.assign({}, row)

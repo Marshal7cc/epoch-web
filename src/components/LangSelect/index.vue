@@ -18,7 +18,7 @@
 </template>
 
 <script>
-  import { i18n } from '@/api/system/prompt'
+  import promptApi from '@/api/system/prompt'
   import { getLanguage } from '@/lang/index'
 
   export default {
@@ -47,7 +47,7 @@
         }, 3500)
       },
       initPrompt() {
-        i18n(getLanguage()).then(res => {
+        promptApi.i18n(getLanguage()).then(res => {
           localStorage.setItem('prompt', JSON.stringify(res.data))
         })
       }

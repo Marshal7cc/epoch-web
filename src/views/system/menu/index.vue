@@ -6,7 +6,7 @@
           <div class="filter-container">
             <el-input v-model="menuName" placeholder="输入菜单名称" class="filter-item search-item" />
             <el-button class="filter-item" type="primary" plain @click="search">
-              {{ $t('prompts.table-search') }}
+              {{ $t('epoch.btn-search') }}
             </el-button>
             <el-button class="filter-item" type="warning" plain @click="reset">
               重置
@@ -16,8 +16,8 @@
                 更多<i class="el-icon-arrow-down el-icon--right" />
               </el-button>
               <el-dropdown-menu slot="dropdown">
-                <el-dropdown-item @click.native="add">新增</el-dropdown-item>
-                <el-dropdown-item @click.native="deleteMenu">删除</el-dropdown-item>
+                <el-dropdown-item @click.native="add">{{ $t('epoch.btn-add') }}</el-dropdown-item>
+                <el-dropdown-item @click.native="deleteMenu">{{ $t('epoch.btn-delete') }}</el-dropdown-item>
               </el-dropdown-menu>
             </el-dropdown>
           </div>
@@ -37,7 +37,7 @@
       <el-col :xs="24" :sm="12">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
-            <span>{{ menu.menuId === '' ? '新增' : '编辑' }}</span>
+            <span>{{ menu.menuId === '' ? $t('epoch.btn-add') : '编辑' }}</span>
           </div>
           <div>
             <el-form ref="form" :model="menu" :rules="rules" label-position="right" label-width="100px">

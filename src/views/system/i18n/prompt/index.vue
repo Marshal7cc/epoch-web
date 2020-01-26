@@ -4,21 +4,23 @@
       <el-input v-model="queryParam.promptCode" placeholder="描述代码" style="width: 150px;" class="filter-item"/>
       <el-input v-model="queryParam.description" placeholder="描述" style="width: 150px;" class="filter-item"/>
       <el-select v-model="queryParam.lang" placeholder="语言" clearable style="width: 150px" class="filter-item">
-        <el-option v-for="item in langOptions" :key="item.langId" :label="item.langName" :value="item.langId" />
+        <el-option v-for="item in langOptions" :key="item.langId" :label="item.langName" :value="item.langId"/>
       </el-select>
 
-      <el-button v-waves class="filter-item" type="primary" icon="el-icon-search" @click="query">
-        查询
+      <el-button plain class="filter-item" type="primary" icon="el-icon-search" @click="query">
+        {{ $t('epoch.btn-search') }}
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-edit"
-                 @click="add">
-        新增
+      <el-button plain class="filter-item" type="info" icon="el-icon-refresh" @click="reset">
+        {{ $t('epoch.btn-reset') }}
       </el-button>
-      <el-button class="filter-item" style="margin-left: 10px;" type="primary" icon="el-icon-delete"
-                 @click="remove">
-        删除
+      <el-button plain class="filter-item" type="success" icon="el-icon-circle-plus-outline" @click="add">
+        {{ $t('epoch.btn-add') }}
+      </el-button>
+      <el-button plain class="filter-item" type="warning" icon="el-icon-delete" @click="remove">
+        {{ $t('epoch.btn-delete') }}
       </el-button>
     </div>
+
     <el-table
       :key="0"
       v-loading="loading"
@@ -32,7 +34,6 @@
       <el-table-column
         type="selection">
       </el-table-column>
-
       <el-table-column label="代码" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.promptCode }}</span>
@@ -50,8 +51,7 @@
       </el-table-column>
       <el-table-column label="操作" align="center">
         <template slot-scope="{row}">
-          <el-button type="primary" size="mini" @click="edit(row)">
-            编辑
+          <el-button circle type="primary" icon="el-icon-edit" size="mini" @click="edit(row)">
           </el-button>
         </template>
       </el-table-column>
@@ -69,9 +69,9 @@
           </el-input>
         </el-form-item>
         <el-form-item label="语言" prop="语言">
-            <el-select v-model="dto.lang" class="filter-item" placeholder="语言">
-                <el-option v-for="item in langOptions" :key="item.langId" :label="item.langName" :value="item.langId" />
-            </el-select>
+          <el-select v-model="dto.lang" class="filter-item" placeholder="语言">
+            <el-option v-for="item in langOptions" :key="item.langId" :label="item.langName" :value="item.langId"/>
+          </el-select>
         </el-form-item>
         <el-form-item label="描述" prop="roleName">
           <el-input v-model="dto.description" class="filter-item" placeholder="描述">
@@ -80,10 +80,10 @@
       </el-form>
       <div slot="footer" class="dialog-footer">
         <el-button @click="dialog.visible = false">
-          取消
+          {{ $t('epoch.btn-cancel') }}
         </el-button>
-        <el-button type="primary" @click="submit">
-          确认
+        <el-button @click="submit">
+          {{ $t('epoch.btn-save') }}
         </el-button>
       </div>
     </el-dialog>
@@ -91,13 +91,13 @@
 </template>
 
 <script>
-  import base from "@/utils/base"
   import Pagination from '@/components/Pagination'
-  import {query, submit, remove, queryById} from '@/api/system/prompt'
-  import {queryForOptions} from '@/api/system/lang'
+  import base from '@/utils/base'
+  import promptApi from '@/api/system/prompt'
+  import langApi from '@/api/system/lang'
 
   export default {
-    components: {Pagination},
+    components: { Pagination },
     data() {
       return {
         rows: null,
@@ -120,43 +120,41 @@
       this.query()
     },
     mounted() {
-     queryForOptions().then(res=>{
-             this.langOptions = res.data.rows
-     })
+      langApi.queryForOptions().then(res => {
+        this.langOptions = res.data.rows
+      })
     },
     methods: {
       query() {
         this.loading = true
-        query(this.pagination, this.queryParam).then(response => {
+        promptApi.query(this.pagination, this.queryParam).then(response => {
           base.parseResponse(response, this)
         })
       },
       reset() {
-        this.dto = {}
+        this.queryParam = {}
       },
       add() {
-        this.reset()
+        this.dto = {}
         this.dialog.visible = true
-        this.dialog.title = '新增'
+        this.dialog.title = this.$t('epoch.btn-add')
       },
       edit(row) {
-        queryById(row.promptId).then(res=>{this.dto = res.data})
+        promptApi.queryById(row.userId).then(res => {
+          this.dto = res.data
+        })
         this.dialog.visible = true
-        this.dialog.title = '编辑'
+        this.dialog.title = this.$t('epoch.btn-edit')
       },
       submit() {
-        submit(this.dto).then((response) => {
+        promptApi.submit(this.dto).then((response) => {
           this.dialog.visible = false
           base.parseResponse(response, this)
           this.query()
         })
       },
       remove() {
-        base.removeCheck(this)
-        remove(this.$refs.dataGrid.selection).then((response) => {
-          base.parseResponse(response, this)
-          this.query()
-        })
+        base.remove(this, promptApi)
       }
     }
   }

@@ -1,8 +1,8 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="queryParam.roleCode" placeholder="角色编码" style="width: 150px;" class="filter-item"/>
-      <el-input v-model="queryParam.roleName" placeholder="角色名称" style="width: 150px;" class="filter-item"/>
+      <el-input v-model="queryParam.userName" placeholder="用户名称" style="width: 150px;" class="filter-item"/>
+      <el-input v-model="queryParam.phone" placeholder="电话号码" style="width: 150px;" class="filter-item"/>
 
       <el-button plain class="filter-item" type="primary" icon="el-icon-search" @click="query">
         {{ $t('epoch.btn-search') }}
@@ -31,19 +31,24 @@
       <el-table-column
         type="selection">
       </el-table-column>
-      <el-table-column label="角色编码" align="center">
+      <el-table-column label="用户名" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.roleCode }}</span>
+          <span>{{ scope.row.userName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="角色名称" align="center">
+      <el-table-column label="邮箱" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.roleName }}</span>
+          <span>{{ scope.row.email }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="描述" align="center">
+      <el-table-column label="电话" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.roleDescription }}</span>
+          <span>{{ scope.row.phone }}</span>
+        </template>
+      </el-table-column>
+      <el-table-column label="个人说明" align="center">
+        <template slot-scope="scope">
+          <span>{{ scope.row.description }}</span>
         </template>
       </el-table-column>
       <el-table-column label="操作" align="center">
@@ -61,16 +66,20 @@
     <el-dialog :title="dialog.title" :visible.sync="dialog.visible">
       <el-form ref="dataForm" :model="dto" label-position="left" label-width="70px"
                style="width: 400px; margin-left:50px;">
-        <el-form-item label="角色编码" prop="roleCode">
-          <el-input v-model="dto.roleCode" class="filter-item" placeholder="用户名">
+        <el-form-item label="用户名" prop="userName">
+          <el-input v-model="dto.userName" class="filter-item" placeholder="用户名">
           </el-input>
         </el-form-item>
-        <el-form-item label="角色名称" prop="roleName">
-          <el-input v-model="dto.roleName" class="filter-item" placeholder="邮箱">
+        <el-form-item label="邮箱" prop="email">
+          <el-input v-model="dto.email" class="filter-item" placeholder="邮箱">
           </el-input>
         </el-form-item>
-        <el-form-item label="角色说明" prop="description">
-          <el-input v-model="dto.roleDescription" class="filter-item" placeholder="角色说明">
+        <el-form-item label="电话号码" prop="phone">
+          <el-input v-model="dto.phone" class="filter-item" placeholder="电话号码">
+          </el-input>
+        </el-form-item>
+        <el-form-item label="个人说明" prop="description">
+          <el-input v-model="dto.description" class="filter-item" placeholder="个人说明">
           </el-input>
         </el-form-item>
       </el-form>
@@ -89,7 +98,7 @@
 <script>
   import Pagination from '@/components/Pagination'
   import base from '@/utils/base'
-  import roleApi from '@/api/system/role'
+  import userApi from '@/api/system/user'
 
   export default {
     components: { Pagination },
@@ -116,7 +125,7 @@
     methods: {
       query() {
         this.loading = true
-        roleApi.query(this.pagination, this.queryParam).then(response => {
+        userApi.query(this.pagination, this.queryParam).then(response => {
           base.parseResponse(response, this)
         })
       },
@@ -129,21 +138,21 @@
         this.dialog.title = this.$t('epoch.btn-add')
       },
       edit(row) {
-        roleApi.queryById(row.roleId).then(res => {
+        userApi.queryById(row.userId).then(res => {
           this.dto = res.data
         })
         this.dialog.visible = true
         this.dialog.title = this.$t('epoch.btn-edit')
       },
       submit() {
-        roleApi.submit(this.dto).then((response) => {
+        userApi.submit(this.dto).then((response) => {
           this.dialog.visible = false
           base.parseResponse(response, this)
           this.query()
         })
       },
       remove() {
-        base.remove(this, roleApi)
+        base.remove(this, userApi)
       }
     }
   }

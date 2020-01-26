@@ -9,11 +9,11 @@ export default {
    * @param response
    * @param scope
    */
-  parseResponse: function (response, scope) {
+  parseResponse: function(response, scope) {
     if (!response.success) {
       scope.$notify({
         message: response.message,
-        type: "error",
+        type: 'error',
         duration: 2000
       })
     } else {
@@ -26,7 +26,7 @@ export default {
       } else {
         scope.$notify({
           message: response.message,
-          type: "success",
+          type: 'success',
           duration: 2000
         })
       }
@@ -34,17 +34,27 @@ export default {
   },
 
   /**
-   * 批量删除
-   * 是否选中数据校验
+   * 通用删除方法
    * @param scope
    */
-  removeCheck: function (scope) {
+  remove: function(scope, api) {
     if (scope.$refs.dataGrid.selection.length == 0) {
       scope.$notify({
-        message: "请至少选择一条数据",
-        type: "warning",
+        message: '请至少选择一条数据',
+        type: 'warning',
         duration: 2000
       })
+      return
     }
+    scope.$confirm('确定要删除吗?', '提示', {
+      confirmButtonText: '确定',
+      cancelButtonText: '取消',
+      type: 'warning'
+    }).then(() => {
+      api.remove(scope.$refs.dataGrid.selection).then((response) => {
+        this.parseResponse(response, scope)
+        scope.query()
+      })
+    })
   }
 }
