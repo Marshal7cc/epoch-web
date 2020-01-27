@@ -15,7 +15,6 @@ const service = axios.create({
 // request interceptor
 service.interceptors.request.use(
   config => {
-
     if (getToken()) {
       config.headers['Authorization'] = getToken()
     }
@@ -29,7 +28,6 @@ service.interceptors.request.use(
 )
 
 // response interceptor
-// response interceptor
 service.interceptors.response.use((response) => {
   if (response.data) {
     return response.data
@@ -39,6 +37,13 @@ service.interceptors.response.use((response) => {
   if (error.response) {
     const errorMessage = error.response.data === null ? '系统内部异常，请联系网站管理员' : error.response.data.message
     switch (error.response.status) {
+      case 502:
+        Message({
+          message: '网关异常，请联系网站管理员或重试!',
+          type: 'error',
+          duration: 1000
+        })
+        break
       case 404:
         Message({
           message: '很抱歉，资源未找到',

@@ -1,9 +1,6 @@
 import Vue from 'vue'
 import VueI18n from 'vue-i18n'
 
-// 设置element内部UI Local,例如分页
-import ElementUILocale from 'element-ui/lib/locale'
-
 import elementEnLocale from 'element-ui/lib/locale/lang/en'
 import elementZhLocale from 'element-ui/lib/locale/lang/zh-CN'
 import elementJaLocale from 'element-ui/lib/locale/lang/ja'
@@ -55,10 +52,10 @@ const i18n = new VueI18n({
   silentTranslationWarn: true
 })
 
+// 设置element内部UI Local,例如分页
+import ElementUILocale from 'element-ui/lib/locale'
+
 // 设置elementUI内部组件语言
-
-ElementUILocale.use(getElementUILocales(getLanguage()))
-
 const ElementUILocales = {
   zh: elementZhLocale,
   en: elementEnLocale,
@@ -75,4 +72,7 @@ const getElementUILocales = lang => {
       return ElementUILocales.ja
   }
 }
+
+ElementUILocale.use(getElementUILocales(getLanguage()))
+
 export default i18n

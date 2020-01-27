@@ -1,8 +1,18 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="queryParam.userName" placeholder="用户名称" style="width: 150px;" class="filter-item"/>
-      <el-input v-model="queryParam.phone" placeholder="电话号码" style="width: 150px;" class="filter-item"/>
+      <el-input
+        v-model="queryParam.userName"
+        :placeholder="$t('epoch.user-username')"
+        style="width: 150px;"
+        class="filter-item"
+      />
+      <el-input
+        v-model="queryParam.phone"
+        :placeholder="$t('epoch.user-phone')"
+        style="width: 150px;"
+        class="filter-item"
+      />
 
       <el-button plain class="filter-item" type="primary" icon="el-icon-search" @click="query">
         {{ $t('epoch.btn-search') }}
@@ -20,67 +30,71 @@
 
     <el-table
       :key="0"
+      ref="dataGrid"
       v-loading="loading"
       :data="rows"
-      ref="dataGrid"
       border
       fit
       highlight-current-row
       style="width: 100%;"
     >
       <el-table-column
-        type="selection">
-      </el-table-column>
-      <el-table-column label="用户名" align="center">
+        type="selection"
+      />
+      <el-table-column :label="$t('epoch.user-username')" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.userName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="邮箱" align="center">
+      <el-table-column :label="$t('epoch.user-email')" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.email }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="电话" align="center">
+      <el-table-column :label="$t('epoch.user-phone')" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.phone }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="个人说明" align="center">
+      <el-table-column :label="$t('epoch.user-description')" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.description }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center">
+      <el-table-column :label="$t('epoch.common-operation')" align="center">
         <template slot-scope="{row}">
-          <el-button circle type="primary" icon="el-icon-edit" size="mini" @click="edit(row)">
-          </el-button>
+          <el-button circle type="primary" icon="el-icon-edit" size="mini" @click="edit(row)" />
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination v-show="pagination.total>0" :total="pagination.total" :page.sync="pagination.page"
-                :pageSize.sync="pagination.pageSize"
-                @pagination="query"/>
+    <pagination
+      v-show="pagination.total>0"
+      :total="pagination.total"
+      :page.sync="pagination.page"
+      :page-size.sync="pagination.pageSize"
+      @pagination="query"
+    />
 
     <el-dialog :title="dialog.title" :visible.sync="dialog.visible">
-      <el-form ref="dataForm" :model="dto" label-position="left" label-width="70px"
-               style="width: 400px; margin-left:50px;">
-        <el-form-item label="用户名" prop="userName">
-          <el-input v-model="dto.userName" class="filter-item" placeholder="用户名">
-          </el-input>
+      <el-form
+        ref="dataForm"
+        :model="dto"
+        label-position="left"
+        label-width="120px"
+        style="width: 400px; margin-left:50px;"
+      >
+        <el-form-item :label="$t('epoch.user-username')" prop="userName">
+          <el-input v-model="dto.userName" class="filter-item" :placeholder="$t('epoch.user-username')" />
         </el-form-item>
-        <el-form-item label="邮箱" prop="email">
-          <el-input v-model="dto.email" class="filter-item" placeholder="邮箱">
-          </el-input>
+        <el-form-item :label="$t('epoch.user-email')" prop="email">
+          <el-input v-model="dto.email" class="filter-item" :placeholder="$t('epoch.user-email')" />
         </el-form-item>
-        <el-form-item label="电话号码" prop="phone">
-          <el-input v-model="dto.phone" class="filter-item" placeholder="电话号码">
-          </el-input>
+        <el-form-item :label="$t('epoch.user-phone')" prop="phone">
+          <el-input v-model="dto.phone" class="filter-item" :placeholder="$t('epoch.user-phone')" />
         </el-form-item>
-        <el-form-item label="个人说明" prop="description">
-          <el-input v-model="dto.description" class="filter-item" placeholder="个人说明">
-          </el-input>
+        <el-form-item :label="$t('epoch.user-description')" prop="description">
+          <el-input v-model="dto.description" class="filter-item" :placeholder="$t('epoch.user-description')" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -96,64 +110,64 @@
 </template>
 
 <script>
-  import Pagination from '@/components/Pagination'
-  import base from '@/utils/base'
-  import userApi from '@/api/system/user'
+import Pagination from '@/components/Pagination'
+import base from '@/utils/base'
+import userApi from '@/api/system/user'
 
-  export default {
-    components: { Pagination },
-    data() {
-      return {
-        rows: null,
-        pagination: {
-          total: 0,
-          page: 1,
-          pageSize: 10
-        },
-        dialog: {
-          title: null,
-          visible: false
-        },
-        queryParam: {},
-        dto: {},
-        loading: true
-      }
+export default {
+  components: { Pagination },
+  data() {
+    return {
+      rows: null,
+      pagination: {
+        total: 0,
+        page: 1,
+        pageSize: 10
+      },
+      dialog: {
+        title: null,
+        visible: false
+      },
+      queryParam: {},
+      dto: {},
+      loading: true
+    }
+  },
+  created() {
+    this.query()
+  },
+  methods: {
+    query() {
+      this.loading = true
+      userApi.query(this.pagination, this.queryParam).then(response => {
+        base.parseResponse(response, this)
+      })
     },
-    created() {
-      this.query()
+    reset() {
+      this.queryParam = {}
     },
-    methods: {
-      query() {
-        this.loading = true
-        userApi.query(this.pagination, this.queryParam).then(response => {
-          base.parseResponse(response, this)
-        })
-      },
-      reset() {
-        this.queryParam = {}
-      },
-      add() {
-        this.dto = {}
-        this.dialog.visible = true
-        this.dialog.title = this.$t('epoch.btn-add')
-      },
-      edit(row) {
-        userApi.queryById(row.userId).then(res => {
-          this.dto = res.data
-        })
-        this.dialog.visible = true
-        this.dialog.title = this.$t('epoch.btn-edit')
-      },
-      submit() {
-        userApi.submit(this.dto).then((response) => {
-          this.dialog.visible = false
-          base.parseResponse(response, this)
-          this.query()
-        })
-      },
-      remove() {
-        base.remove(this, userApi)
-      }
+    add() {
+      this.dto = {}
+      this.dialog.visible = true
+      this.dialog.title = this.$t('epoch.btn-add')
+    },
+    edit(row) {
+      userApi.queryById(row.userId).then(res => {
+        this.dto = res.data
+      })
+      this.dialog.visible = true
+      this.dialog.title = this.$t('epoch.btn-edit')
+    },
+    submit() {
+      userApi.submit(this.dto).then((response) => {
+        this.dialog.visible = false
+        base.parseResponse(response, this)
+        this.query()
+      })
+    },
+    remove() {
+      base.remove(this, userApi)
     }
   }
+}
 </script>
