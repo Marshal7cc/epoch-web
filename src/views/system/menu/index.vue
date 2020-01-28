@@ -4,16 +4,17 @@
       <el-col :xs="24" :sm="12">
         <div class="app-container">
           <div class="filter-container">
-            <el-input v-model="menuName" placeholder="输入菜单名称" class="filter-item search-item" />
+            <el-input v-model="menuName" :placeholder="$t('epoch.menu-name')" class="filter-item search-item" />
             <el-button class="filter-item" type="primary" plain @click="search">
               {{ $t('epoch.btn-search') }}
             </el-button>
             <el-button class="filter-item" type="warning" plain @click="reset">
-              重置
+              {{ $t('epoch.btn-reset') }}
             </el-button>
-            <el-dropdown v-has-any-permission="['menu:add','menu:delete','menu:export']" trigger="click" class="filter-item">
+            <el-dropdown trigger="click" class="filter-item">
               <el-button>
-                更多<i class="el-icon-arrow-down el-icon--right" />
+                {{ $t('epoch.btn-more') }}
+                <i class="el-icon-arrow-down el-icon--right" />
               </el-button>
               <el-dropdown-menu slot="dropdown">
                 <el-dropdown-item @click.native="add">{{ $t('epoch.btn-add') }}</el-dropdown-item>
@@ -37,11 +38,11 @@
       <el-col :xs="24" :sm="12">
         <el-card class="box-card">
           <div slot="header" class="clearfix">
-            <span>{{ menu.menuId === '' ? $t('epoch.btn-add') : '编辑' }}</span>
+            <span>{{ menu.menuId === '' ? $t('epoch.btn-add') : $t('epoch.btn-edit') }}</span>
           </div>
           <div>
             <el-form ref="form" :model="menu" :rules="rules" label-position="right" label-width="100px">
-              <el-form-item label="父级菜单" prop="parentId">
+              <el-form-item :label="$t('epoch.menu-parentMenu')" prop="parentId">
                 <treeselect
                   v-model="menu.parentId"
                   :multiple="false"
@@ -51,27 +52,27 @@
                   style="width:100%"
                 />
               </el-form-item>
-              <el-form-item label="菜单名称" prop="menuName">
+              <el-form-item :label="$t('epoch.menu-name')" prop="menuName">
                 <el-input v-model="menu.menuName" />
               </el-form-item>
-              <el-form-item label="菜单编码" prop="menuCode">
-                              <el-input v-model="menu.menuCode" />
-                            </el-form-item>
-              <el-form-item label="图标" prop="menuIcon">
+              <el-form-item :label="$t('epoch.menu-code')" prop="menuCode">
+                <el-input v-model="menu.menuCode" />
+              </el-form-item>
+              <el-form-item :label="$t('epoch.menu-icon')" prop="menuIcon">
                 <el-input v-model="menu.menuIcon">
                   <el-button slot="append" icon="el-icon-brush" style="padding-left: 0;" @click="chooseIcons" />
                 </el-input>
               </el-form-item>
-              <el-form-item label="路径" prop="path">
+              <el-form-item :label="$t('epoch.menu-path')" prop="path">
                 <el-input v-model="menu.path" />
               </el-form-item>
-              <el-form-item label="组件" prop="component">
+              <el-form-item :label="$t('epoch.menu-component')" prop="component">
                 <el-input v-model="menu.component" />
               </el-form-item>
-              <el-form-item label="描述" prop="description">
+              <el-form-item :label="$t('epoch.common-description')" prop="description">
                 <el-input v-model="menu.description" />
               </el-form-item>
-              <el-form-item label="序号" prop="sequence">
+              <el-form-item :label="$t('epoch.common-order')" prop="sequence">
                 <el-input-number v-model="menu.sequence" :min="0" :max="100" @change="handleNumChange" />
               </el-form-item>
             </el-form>
@@ -80,7 +81,8 @@
         <el-card class="box-card" style="margin-top: -2rem;">
           <el-row>
             <el-col :span="24" style="text-align: right">
-              <el-button type="primary" plain :loading="buttonLoading" @click="submit">'保存'</el-button>
+              <el-button type="primary" plain :loading="buttonLoading" @click="submit">{{ $t('epoch.btn-save') }}
+              </el-button>
             </el-col>
           </el-row>
         </el-card>
@@ -97,7 +99,7 @@
 import Icons from './Icons'
 import Treeselect from '@riophae/vue-treeselect'
 import '@riophae/vue-treeselect/dist/vue-treeselect.css'
-import base from "@/utils/base";
+import base from '@/utils/base'
 import { queryMenuTree, submit, remove, queryById } from '@/api/system/menu'
 
 export default {
@@ -147,9 +149,9 @@ export default {
       return data.label.indexOf(value) !== -1
     },
     nodeClick(data, node, v) {
-        queryById(data.id).then(res=>{
-            this.menu = res.data
-        })
+      queryById(data.id).then(res => {
+        this.menu = res.data
+      })
     },
     handleNumChange(val) {
       this.menu.sequence = val
@@ -165,8 +167,8 @@ export default {
       this.$refs.form.validate((valid) => {
         if (valid) {
           submit(this.menu).then((response) => {
-                    base.parseResponse(response, this)
-                    this.initMenuTree()
+            base.parseResponse(response, this)
+            this.initMenuTree()
           })
         } else {
           return false
@@ -188,19 +190,21 @@ export default {
       const checked = this.$refs.menuTree.getCheckedKeys()
       if (checked.length === 0) {
         this.$message({
-          message: this.$t('tips.noNodeSelected'),
+          message: this.$t('epoch.tip-deleteSelectCheck'),
           type: 'warning'
         })
       } else {
-        this.$confirm(this.$t('tips.confirmDeleteNode'), this.$t('common.tips'), {
-          confirmButtonText: this.$t('common.confirm'),
-          cancelButtonText: this.$t('common.cancel'),
+        this.$confirm(this.$t('epoch.tip-deleteSelectConfirm'), this.$t('epoch.tip-title'), {
+          confirmButtonText: this.$t('epoch.btn-confirm'),
+          cancelButtonText: this.$t('epoch.btn-cancel'),
           type: 'warning'
         }).then(() => {
-          remove(this.$refs.menuTree.getCheckedNodes().map(function(item){ return { menuId:item.id } })).then((response) => {
-                    base.parseResponse(response, this)
-                    this.query()
-                  })
+          remove(this.$refs.menuTree.getCheckedNodes().map(function(item) {
+            return { menuId: item.id }
+          })).then((response) => {
+            base.parseResponse(response, this)
+            this.query()
+          })
         }).catch(() => {
           this.$refs.menuTree.setCheckedKeys([])
         })
@@ -217,16 +221,20 @@ export default {
 <style lang="scss" scoped>
   .menu {
     margin: 10px;
+
     .app-container {
       margin: 0 0 10px 0 !important;
     }
   }
+
   .el-card.is-always-shadow {
     box-shadow: none;
   }
+
   .el-card {
     border-radius: 0;
     border: none;
+
     .el-card__header {
       padding: 10px 20px !important;
       border-bottom: 1px solid #f1f1f1 !important;

@@ -1,7 +1,12 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="queryParam.langName" placeholder="语言名称" style="width: 150px;" class="filter-item"/>
+      <el-input
+        v-model="queryParam.langName"
+        :placeholder="$t('epoch.lang-name')"
+        style="width: 150px;"
+        class="filter-item"
+      />
 
       <el-button plain class="filter-item" type="primary" icon="el-icon-search" @click="query">
         {{ $t('epoch.btn-search') }}
@@ -19,58 +24,63 @@
 
     <el-table
       :key="0"
+      ref="dataGrid"
       v-loading="loading"
       :data="rows"
-      ref="dataGrid"
       border
       fit
       highlight-current-row
       style="width: 100%;"
     >
       <el-table-column
-        type="selection">
-      </el-table-column>
-      <el-table-column label="语言代码" align="center">
+        type="selection"
+      />
+      <el-table-column :label="$t('epoch.lang-code')" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.langCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="语言名称" align="center">
+      <el-table-column :label="$t('epoch.lang-name')" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.langName }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="描述" align="center">
+      <el-table-column :label="$t('epoch.common-description')" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.description }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center">
+      <el-table-column :label="$t('epoch.common-operation')" align="center">
         <template slot-scope="{row}">
-          <el-button circle type="primary" icon="el-icon-edit" size="mini" @click="edit(row)">
-          </el-button>
+          <el-button circle type="primary" icon="el-icon-edit" size="mini" @click="edit(row)" />
         </template>
       </el-table-column>
     </el-table>
 
-    <pagination v-show="pagination.total>0" :total="pagination.total" :page.sync="pagination.page"
-                :pageSize.sync="pagination.pageSize"
-                @pagination="query"/>
+    <pagination
+      v-show="pagination.total>0"
+      :total="pagination.total"
+      :page.sync="pagination.page"
+      :page-size.sync="pagination.pageSize"
+      @pagination="query"
+    />
 
     <el-dialog :title="dialog.title" :visible.sync="dialog.visible">
-      <el-form ref="dataForm" :model="dto" label-position="left" label-width="70px"
-               style="width: 400px; margin-left:50px;">
-        <el-form-item label="语言代码" prop="langCode">
-          <el-input v-model="dto.langCode" class="filter-item" placeholder="语言代码">
-          </el-input>
+      <el-form
+        ref="dataForm"
+        :model="dto"
+        label-position="left"
+        label-width="70px"
+        style="width: 400px; margin-left:50px;"
+      >
+        <el-form-item :label="$t('epoch.lang-code')" prop="langCode">
+          <el-input v-model="dto.langCode" class="filter-item" :placeholder="$t('epoch.lang-code')" />
         </el-form-item>
-        <el-form-item label="语言名称" prop="langName">
-          <el-input v-model="dto.langName" class="filter-item" placeholder="语言名称">
-          </el-input>
+        <el-form-item :label="$t('epoch.lang-name')" prop="langName">
+          <el-input v-model="dto.langName" class="filter-item" :placeholder="$t('epoch.lang-name')" />
         </el-form-item>
-        <el-form-item label="描述" prop="langName">
-          <el-input v-model="dto.description" class="filter-item" placeholder="描述">
-          </el-input>
+        <el-form-item :label="$t('epoch.common-description')" prop="langName">
+          <el-input v-model="dto.description" class="filter-item" :placeholder="$t('common-description')" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">
@@ -86,64 +96,64 @@
 </template>
 
 <script>
-  import Pagination from '@/components/Pagination'
-  import base from '@/utils/base'
-  import langApi from '@/api/system/lang'
+import Pagination from '@/components/Pagination'
+import base from '@/utils/base'
+import langApi from '@/api/system/lang'
 
-  export default {
-    components: { Pagination },
-    data() {
-      return {
-        rows: null,
-        pagination: {
-          total: 0,
-          page: 1,
-          pageSize: 10
-        },
-        dialog: {
-          title: null,
-          visible: false
-        },
-        queryParam: {},
-        dto: {},
-        loading: true
-      }
+export default {
+  components: { Pagination },
+  data() {
+    return {
+      rows: null,
+      pagination: {
+        total: 0,
+        page: 1,
+        pageSize: 10
+      },
+      dialog: {
+        title: null,
+        visible: false
+      },
+      queryParam: {},
+      dto: {},
+      loading: true
+    }
+  },
+  created() {
+    this.query()
+  },
+  methods: {
+    query() {
+      this.loading = true
+      langApi.query(this.pagination, this.queryParam).then(response => {
+        base.parseResponse(response, this)
+      })
     },
-    created() {
-      this.query()
+    reset() {
+      this.queryParam = {}
     },
-    methods: {
-      query() {
-        this.loading = true
-        langApi.query(this.pagination, this.queryParam).then(response => {
-          base.parseResponse(response, this)
-        })
-      },
-      reset() {
-        this.queryParam = {}
-      },
-      add() {
-        this.dto = {}
-        this.dialog.visible = true
-        this.dialog.title = this.$t('epoch.btn-add')
-      },
-      edit(row) {
-        langApi.queryById(row.langId).then(res => {
-          this.dto = res.data
-        })
-        this.dialog.visible = true
-        this.dialog.title = this.$t('epoch.btn-edit')
-      },
-      submit() {
-        langApi.submit(this.dto).then((response) => {
-          this.dialog.visible = false
-          base.parseResponse(response, this)
-          this.query()
-        })
-      },
-      remove() {
-        base.remove(this, langApi)
-      }
+    add() {
+      this.dto = {}
+      this.dialog.visible = true
+      this.dialog.title = this.$t('epoch.btn-add')
+    },
+    edit(row) {
+      langApi.queryById(row.langId).then(res => {
+        this.dto = res.data
+      })
+      this.dialog.visible = true
+      this.dialog.title = this.$t('epoch.btn-edit')
+    },
+    submit() {
+      langApi.submit(this.dto).then((response) => {
+        this.dialog.visible = false
+        base.parseResponse(response, this)
+        this.query()
+      })
+    },
+    remove() {
+      base.remove(this, langApi)
     }
   }
+}
 </script>

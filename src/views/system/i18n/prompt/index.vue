@@ -1,9 +1,25 @@
 <template>
   <div class="app-container">
     <div class="filter-container">
-      <el-input v-model="queryParam.promptCode" placeholder="描述代码" style="width: 150px;" class="filter-item" />
-      <el-input v-model="queryParam.description" placeholder="描述" style="width: 150px;" class="filter-item" />
-      <el-select v-model="queryParam.lang" placeholder="语言" clearable style="width: 150px" class="filter-item">
+      <el-input
+        v-model="queryParam.promptCode"
+        :placeholder="$t('epoch.common-code')"
+        style="width: 150px;"
+        class="filter-item"
+      />
+      <el-input
+        v-model="queryParam.description"
+        :placeholder="$t('epoch.common-description')"
+        style="width: 150px;"
+        class="filter-item"
+      />
+      <el-select
+        v-model="queryParam.lang"
+        :placeholder="$t('epoch.lang-name')"
+        clearable
+        style="width: 150px"
+        class="filter-item"
+      >
         <el-option v-for="item in langOptions" :key="item.langId" :label="item.langName" :value="item.langId" />
       </el-select>
 
@@ -34,22 +50,22 @@
       <el-table-column
         type="selection"
       />
-      <el-table-column label="代码" align="center">
+      <el-table-column :label="$t('epoch.common-code')" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.promptCode }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="语言" align="center">
+      <el-table-column :label="$t('epoch.lang-name')" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.lang }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="描述" align="center">
+      <el-table-column :label="$t('epoch.common-description')" align="center">
         <template slot-scope="scope">
           <span>{{ scope.row.description }}</span>
         </template>
       </el-table-column>
-      <el-table-column label="操作" align="center">
+      <el-table-column :label="$t('epoch.common-operation')" align="center">
         <template slot-scope="{row}">
           <el-button circle type="primary" icon="el-icon-edit" size="mini" @click="edit(row)" />
         </template>
@@ -69,19 +85,19 @@
         ref="dataForm"
         :model="dto"
         label-position="left"
-        label-width="70px"
+        label-width="90px"
         style="width: 400px; margin-left:50px;"
       >
-        <el-form-item label="代码" prop="roleCode">
-          <el-input v-model="dto.promptCode" class="filter-item" placeholder="代码" />
+        <el-form-item :label="$t('epoch.common-code')" prop="roleCode">
+          <el-input v-model="dto.promptCode" class="filter-item" :placeholder="$t('epoch.common-code')" />
         </el-form-item>
-        <el-form-item label="语言" prop="语言">
-          <el-select v-model="dto.lang" class="filter-item" placeholder="语言">
+        <el-form-item :label="$t('epoch.lang-name')" prop="lang">
+          <el-select v-model="dto.lang" class="filter-item" :placeholder="$t('epoch.lang-name')">
             <el-option v-for="item in langOptions" :key="item.langId" :label="item.langName" :value="item.langId" />
           </el-select>
         </el-form-item>
-        <el-form-item label="描述" prop="roleName">
-          <el-input v-model="dto.description" class="filter-item" placeholder="描述" />
+        <el-form-item :label="$t('epoch.common-description')" prop="roleName">
+          <el-input v-model="dto.description" class="filter-item" :placeholder="$t('epoch.common-description')" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

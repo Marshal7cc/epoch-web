@@ -12,7 +12,7 @@ export default {
   parseResponse: function(response, scope) {
     if (!response.success) {
       scope.$notify({
-        message: response.message,
+        message: scope.$t(response.message),
         type: 'error',
         duration: 2000
       })
@@ -25,7 +25,7 @@ export default {
         }, 0.5 * 1000)
       } else {
         scope.$notify({
-          message: response.message,
+          message: scope.$t(response.message),
           type: 'success',
           duration: 2000
         })
@@ -40,15 +40,15 @@ export default {
   remove: function(scope, api) {
     if (scope.$refs.dataGrid.selection.length == 0) {
       scope.$notify({
-        message: '请至少选择一条数据',
+        message: scope.$t('epoch.tip-deleteSelectCheck'),
         type: 'warning',
         duration: 2000
       })
       return
     }
-    scope.$confirm('确定要删除吗?', '提示', {
-      confirmButtonText: '确定',
-      cancelButtonText: '取消',
+    scope.$confirm(scope.$t('epoch.tip-deleteSelectConfirm'), scope.$t('epoch.tip-title'), {
+      confirmButtonText: scope.$t('epoch.btn-confirm'),
+      cancelButtonText: scope.$t('epoch.btn-cancel'),
       type: 'warning'
     }).then(() => {
       api.remove(scope.$refs.dataGrid.selection).then((response) => {

@@ -1,6 +1,6 @@
 <template>
   <el-dialog
-    :title="$t('table.menu.icon')"
+    :title="$t('epoch.menu-icon')"
     :width="width"
     top="50px"
     :close-on-click-modal="false"
@@ -47,10 +47,10 @@
     </el-tabs>
     <div slot="footer" class="dialog-footer">
       <el-button type="warning" plain @click="isVisible = false">
-        {{ $t('common.cancel') }}
+        {{ $t('epoch.btn-cancel') }}
       </el-button>
       <el-button type="primary" plain @click="confirm">
-        {{ $t('common.confirm') }}
+        {{ $t('epoch.btn-confirm') }}
       </el-button>
     </div>
   </el-dialog>
