@@ -56,7 +56,7 @@
   import LangSelect from '@/components/LangSelect'
   import SizeSelect from '@/components/SizeSelect'
   import Search from '@/components/HeaderSearch'
-  import { removeToken } from '@/utils/auth'
+  import loginApi from '@/api/login/login'
 
   export default {
     components: {
@@ -80,7 +80,7 @@
         this.$store.dispatch('app/toggleSideBar')
       },
       logout() {
-        removeToken()
+        loginApi.logout()
         location.reload()
       }
     }

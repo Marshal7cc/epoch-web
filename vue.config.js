@@ -44,7 +44,8 @@ module.exports = {
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: ''
-        }
+        },
+        ws: false
       }
     },
   },

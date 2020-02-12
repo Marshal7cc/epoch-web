@@ -5,155 +5,135 @@
       <div class="title">EPOCH 微服务平台</div>
       <div class="sub-title">分享生活，留住感动</div>
     </div>
-    <el-form ref="loginForm" :model="loginForm" :rules="loginRules" class="login-form" autocomplete="on"
-             label-position="left">
-
+    <!--  登录信息表单   -->
+    <el-form ref="authenticationInfo" :model="authenticationInfo" :rules="rules" class="login-form">
       <div class="title-container">
         <h3 class="title">EPOCH 登录</h3>
       </div>
-
-      <el-form-item prop="username">
-        <span class="svg-container">
-          <svg-icon icon-class="user"/>
-        </span>
-        <el-input
-          ref="username"
-          v-model="loginForm.username"
-          placeholder="Username"
-          name="username"
-          type="text"
-          tabindex="1"
-          autocomplete="on"
-        />
-      </el-form-item>
-
-      <el-tooltip v-model="capsTooltip" content="Caps lock is On" placement="right" manual>
-        <el-form-item prop="password">
-          <span class="svg-container">
-            <svg-icon icon-class="password"/>
-          </span>
+      <!--  账户密码登录   -->
+      <span v-if="login.type==='password'">
+        <el-form-item prop="username">
           <el-input
-            :key="passwordType"
+            prefix-icon="el-icon-user"
+            ref="username"
+            v-model="authenticationInfo.username"
+            name="username"
+            type="text"/>
+        </el-form-item>
+
+        <el-form-item prop="password">
+          <el-input
+            prefix-icon="el-icon-key"
             ref="password"
-            v-model="loginForm.password"
-            :type="passwordType"
-            placeholder="Password"
+            v-model="authenticationInfo.password"
             name="password"
-            tabindex="2"
-            autocomplete="on"
-            @keyup.native="checkCapslock"
-            @blur="capsTooltip = false"
+            :show-password="true"
+          />
+        </el-form-item>
+
+        <el-form-item prop="validateCode" class="code-input">
+          <el-input
+            ref="validateCode"
+            v-model="authenticationInfo.validateCode"
+            prefix-icon="el-icon-lock"
+            placeholder="验证码"
+            name="validateCode"
+            type="text"
             @keyup.enter.native="handleLogin"
           />
-          <span class="show-pwd" @click="showPwd">
-            <svg-icon :icon-class="passwordType === 'password' ? 'eye' : 'eye-open'"/>
-          </span>
         </el-form-item>
-      </el-tooltip>
-      <el-button :loading="loading" type="primary" style="width:70%;margin-bottom:30px;margin-left:15%"
+        <img :src="validateCode.imageCode" alt="codeImage" class="code-image" @click="getCodeImage">
+
+      <el-button :loading="loading" type="primary" style="width:80%;margin-bottom:30px;margin-left:10%"
                  @click.native.prevent="handleLogin">登录
       </el-button>
+      </span>
+      <!--  第三方账号登录 表单  -->
+      <span v-if="login.type === 'thirdParty'">
+        选择登录方式
+        <div>
+          <template v-for="(l, index) in logo">
+            <div :key="index" class="logo-wrapper">
+              <img :src="resolveLogo(l.img)" alt="" :class="{ 'radius': l.radius }" @click="socialLogin(l.name)">
+            </div>
+          </template>
+        </div>
+      </span>
+
+      <el-dropdown class="login-type" placement="top-end">
+        <span class="el-dropdown-link">
+          <el-link type="primary"> 其他方式登录 </el-link>
+        </span>
+        <el-dropdown-menu slot="dropdown">
+          <el-dropdown-item :disabled="login.type === 'password'" @click.native="login.type = 'password'">账户密码登录
+          </el-dropdown-item>
+          <el-dropdown-item :disabled="login.type === 'thirdParty'" @click.native="login.type = 'thirdParty'">第三方账号登录
+          </el-dropdown-item>
+        </el-dropdown-menu>
+      </el-dropdown>
     </el-form>
   </div>
 </template>
 
 <script>
-  import { setToken } from '../../utils/auth'
-  import { validUsername } from '@/utils/validate'
-  import SocialSign from './components/SocialSignin'
-  import { login } from '@/api/login/login.js'
+  import auth from '@/utils/auth'
+  import base from '@/utils/base'
+  import loginApi from '@/api/login/login'
 
   export default {
     name: 'Login',
-    components: { SocialSign },
+    components: {},
     data() {
-      const validateUsername = (rule, value, callback) => {
-        if (!validUsername(value)) {
-          callback(new Error('Please enter the correct user name'))
-        } else {
-          callback()
-        }
-      }
-      const validatePassword = (rule, value, callback) => {
-        if (value.length < 1) {
-          callback(new Error('The password can not be less than 6 digits'))
-        } else {
-          callback()
-        }
-      }
       return {
-        loginForm: {
+        authenticationInfo: {
           username: 'Marshal',
-          password: '1'
+          password: '1',
+          validateCode: '',
+          validateCodeKey: base.randomNum(24, 16)
         },
-        loginRules: {
-          username: [{ required: true, trigger: 'blur', validator: validateUsername }],
-          password: [{ required: true, trigger: 'blur', validator: validatePassword }]
+        login: {
+          type: 'password'
         },
-        passwordType: 'password',
-        capsTooltip: false,
+        logo: [
+          { img: 'github.png', name: 'github', radius: true },
+          { img: 'qq.png', name: 'qq', radius: false }
+        ],
+        rules: {
+          username: [{ required: true, trigger: 'blur' }],
+          password: [{ required: true, trigger: 'blur' }],
+          validateCode: [{ required: true, trigger: 'blur' }]
+        },
         loading: false,
-        redirect: undefined,
-        otherQuery: {}
-      }
-    },
-    watch: {
-      $route: {
-        handler: function(route) {
-          const query = route.query
-          if (query) {
-            this.redirect = query.redirect
-            this.otherQuery = this.getOtherQuery(query)
-          }
+        validateCode: {
+          imageCode: ''
         },
-        immediate: true
+        redirect: 'dashboard'
       }
     },
     created() {
-      // window.addEventListener('storage', this.afterQRScan)
     },
     mounted() {
-      if (this.loginForm.username === '') {
-        this.$refs.username.focus()
-      } else if (this.loginForm.password === '') {
-        this.$refs.password.focus()
-      }
+      this.getCodeImage()
     },
     destroyed() {
-      // window.removeEventListener('storage', this.afterQRScan)
     },
     methods: {
-      checkCapslock({ shiftKey, key } = {}) {
-        if (key && key.length === 1) {
-          if (shiftKey && (key >= 'a' && key <= 'z') || !shiftKey && (key >= 'A' && key <= 'Z')) {
-            this.capsTooltip = true
-          } else {
-            this.capsTooltip = false
-          }
-        }
-        if (key === 'CapsLock' && this.capsTooltip === true) {
-          this.capsTooltip = false
-        }
+      getCodeImage() {
+        loginApi.generateValidateCode(this.authenticationInfo.validateCodeKey, this)
       },
-      showPwd() {
-        if (this.passwordType === 'password') {
-          this.passwordType = ''
-        } else {
-          this.passwordType = 'password'
-        }
-        this.$nextTick(() => {
-          this.$refs.password.focus()
-        })
+      resolveLogo(logo) {
+        return require(`@/assets/logo/${logo}`)
       },
       handleLogin() {
-        this.$refs.loginForm.validate(valid => {
+        this.$refs.authenticationInfo.validate(valid => {
           if (valid) {
-            login(this.loginForm.username, this.loginForm.password)
+            loginApi.login(this.authenticationInfo)
               .then(res => {
                 if (res) {
+                  debugger
                   this.loading = true
-                  setToken(res.token_type + ' ' + res.access_token)
-                  this.$router.push({ path: this.redirect || '/', query: this.otherQuery })
+                  auth.setToken(res.token_type + ' ' + res.access_token)
+                  this.$router.push({ path: this.redirect })
                   this.loading = false
                 } else {
                   this.$message.error(res.message)
@@ -163,33 +143,7 @@
             return false
           }
         })
-      },
-      getOtherQuery(query) {
-        return Object.keys(query).reduce((acc, cur) => {
-          if (cur !== 'redirect') {
-            acc[cur] = query[cur]
-          }
-          return acc
-        }, {})
       }
-      // afterQRScan() {
-      //   if (e.key === 'x-admin-oauth-code') {
-      //     const code = getQueryObject(e.newValue)
-      //     const codeMap = {
-      //       wechat: 'code',
-      //       tencent: 'code'
-      //     }
-      //     const type = codeMap[this.auth_type]
-      //     const codeName = code[type]
-      //     if (codeName) {
-      //       this.$store.dispatch('LoginByThirdparty', codeName).then(() => {
-      //         this.$router.push({ path: this.redirect || '/' })
-      //       })
-      //     } else {
-      //       alert('第三方登录失败')
-      //     }
-      //   }
-      // }
     }
   }
 </script>

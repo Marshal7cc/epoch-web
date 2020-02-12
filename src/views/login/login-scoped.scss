@@ -42,13 +42,46 @@ $light_gray: #eee;
     position: absolute;
     top: 50%;
     left: 70%;
-    margin: -180px 0 0 -160px;
-    width: 380px;
-    height: 380px;
+    margin: -180px 0 0 -220px;
+    width: 360px;
+    height: 420px;
     padding: 36px;
     background: #fff;
     border-radius: 3px;
 
+    .login-type {
+      text-align: right;
+      display: inline-block;
+      width: 100%;
+    }
+
+    .logo-wrapper {
+      display: inline-block;
+      margin: 10px 0;
+
+      img {
+        width: 1.9rem;
+        display: inline-block;
+        margin: .8rem .8rem -.8rem .8rem;
+        cursor: pointer;
+
+        &.radius {
+          border-radius: 50%;
+        }
+      }
+    }
+
+    .code-input {
+      width: 45%;
+      display: inline-block;
+      vertical-align: middle;
+    }
+
+    .code-image {
+      display: inline-block;
+      vertical-align: top;
+      cursor: pointer;
+    }
   }
 
   .svg-container {
