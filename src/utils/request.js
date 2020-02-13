@@ -38,7 +38,7 @@ service.interceptors.response.use((response) => {
         break
       case 502:
         Message({
-          message: '网关异常，请联系网站管理员或重试!',
+          message: errorMessage,
           type: 'error',
           duration: 1000
         })
@@ -63,6 +63,7 @@ service.interceptors.response.use((response) => {
           type: 'error',
           duration: 1000
         })
+        location.reload()
         break
       default:
         if (errorMessage === 'refresh token无效') {

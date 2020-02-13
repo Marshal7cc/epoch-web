@@ -1,7 +1,7 @@
 <template>
   <el-dropdown trigger="click" class="international" @command="handleSetLanguage">
     <div>
-      <svg-icon class-name="international-icon" icon-class="language" style="color: #a8a9a9;"/>
+      <svg-icon class-name="international-icon" icon-class="language" style="color: #a8a9a9;" />
     </div>
     <el-dropdown-menu slot="dropdown">
       <el-dropdown-item :disabled="language==='zh'" command="zh">
@@ -18,39 +18,41 @@
 </template>
 
 <script>
-  import promptApi from '@/api/system/prompt'
-  import { getLanguage } from '@/lang/index'
+import promptApi from '@/api/system/prompt'
+import auth from '@/utils/auth'
+import { getLanguage } from '@/lang/index'
 
-  export default {
-    name: 'langSelect',
-    created() {
-      this.initPrompt()
-    },
-    computed: {
-      language() {
-        return this.$store.state.settings.language
-      }
-    },
-    methods: {
-      handleSetLanguage(lang) {
-        this.$i18n.locale = lang
-        this.$store.commit('settings/setLanguage', lang)
-        this.$message({
-          message: this.$t('tips.switchLanguageSuccess'),
-          type: 'success'
-        })
+export default {
+  name: 'LangSelect',
+  computed: {
+    language() {
+      return this.$store.state.settings.language
+    }
+  },
+  created() {
+    this.initPrompt()
+  },
+  methods: {
+    handleSetLanguage(lang) {
+      this.$i18n.locale = lang
+      this.$store.commit('settings/setLanguage', lang)
+      this.$message({
+        message: this.$t('tips.switchLanguageSuccess'),
+        type: 'success'
+      })
 
-        let that = this
-        setTimeout(function() {
-          that.initPrompt()
-          location.reload()
-        }, 3500)
-      },
-      initPrompt() {
-        promptApi.i18n(getLanguage()).then(res => {
-          localStorage.setItem('prompt', JSON.stringify(res.data))
-        })
-      }
+      const that = this
+      setTimeout(function() {
+        that.initPrompt()
+        auth.removeToken()
+        location.reload()
+      }, 3500)
+    },
+    initPrompt() {
+      promptApi.i18n(getLanguage()).then(res => {
+        localStorage.setItem('prompt', JSON.stringify(res.data))
+      })
     }
   }
+}
 </script>
