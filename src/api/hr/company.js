@@ -4,15 +4,10 @@ export default {
   /**
    * 查询
    */
-  query: function query(pagination, queryParam) {
+  query: function query() {
     return request({
       url: '/hr/company/query',
-      method: 'post',
-      params: {
-        page: pagination.page,
-        pageSize: pagination.pageSize
-      },
-      data: queryParam
+      method: 'get'
     })
   },
   /**
@@ -24,30 +19,6 @@ export default {
       url: '/hr/company/submit',
       method: 'post',
       data: dto
-    })
-  },
-  /**
-   * 删除
-   * @param rows
-   */
-  remove: function remove(rows) {
-    return request({
-      url: '/hr/company/remove',
-      method: 'post',
-      data: rows
-    })
-  },
-  /**
-   * 根据ID查询
-   * @param id
-   */
-  queryById: function queryById(id) {
-    return request({
-      url: '/hr/company/queryById',
-      method: 'get',
-      params: {
-        'id': id
-      }
     })
   }
 }

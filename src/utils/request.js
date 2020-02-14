@@ -63,7 +63,9 @@ service.interceptors.response.use((response) => {
           type: 'error',
           duration: 1000
         })
-        location.reload()
+        setTimeout(function() {
+          location.reload()
+        }, 1000)
         break
       default:
         if (errorMessage === 'refresh token无效') {

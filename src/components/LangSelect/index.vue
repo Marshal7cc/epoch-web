@@ -40,13 +40,10 @@ export default {
         message: this.$t('tips.switchLanguageSuccess'),
         type: 'success'
       })
-
-      const that = this
-      setTimeout(function() {
-        that.initPrompt()
-        auth.removeToken()
+      this.initPrompt()
+      setTimeout(() => {
         location.reload()
-      }, 3500)
+      }, 1000)
     },
     initPrompt() {
       promptApi.i18n(getLanguage()).then(res => {
