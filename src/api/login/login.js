@@ -24,6 +24,7 @@ export default {
    */
   logout: function() {
     auth.removeToken()
+    auth.clear()
   },
   /**
    * 生成图片验证码

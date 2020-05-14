@@ -1,7 +1,13 @@
 <template>
   <div v-loading="loading" :style="'height:'+ height">
     <div class="app-container" style="width: 100%;height: 100%">
-      <iframe :src="src" frameborder="no" style="width: 100%;height: 100%" scrolling="auto" />
+      <!--      <el-row style="margin: 5px 0">-->
+      <!--        <el-input v-model="url" :placeholder="$t('common.pleaseInputUrl')" style="width: 50%" />-->
+      <!--        &nbsp;-->
+      <!--        <el-button type="success" plain @click="refresh">{{ $t('table.refresh') }}</el-button>-->
+      <!--        <el-button type="info" plain @click="openInNewPage">{{ $t('table.openInNewPage') }}</el-button>-->
+      <!--      </el-row>-->
+      <iframe :src="src" frameborder="no" scrolling="auto" style="width: 100%;height: 100%" />
     </div>
   </div>
 </template>
