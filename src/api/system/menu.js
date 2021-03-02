@@ -5,7 +5,7 @@ import request from '@/utils/request'
  */
 export function queryMenuTree() {
   return request({
-    url: '/system/menu/queryMenuTree',
+    url: '/system/menus/queryMenuTree',
     method: 'post',
     data: {}
   })
@@ -54,7 +54,7 @@ export function queryById(id) {
  */
 export function getUserMenu() {
   return request({
-    url: '/system/menu/getUserMenu',
+    url: '/system/menus/getUserMenu',
     method: 'get'
   })
 }

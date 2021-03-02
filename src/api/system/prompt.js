@@ -56,7 +56,7 @@ export default {
    */
   i18n: function(langCode) {
     return request({
-      url: '/system/prompt/i18n',
+      url: '/system/prompts/i18n',
       method: 'get',
       params: {
         'langCode': langCode

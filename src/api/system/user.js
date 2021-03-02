@@ -6,8 +6,8 @@ export default {
    */
   query: function query(pagination, queryParam) {
     return request({
-      url: '/system/user/query',
-      method: 'post',
+      url: '/iam/users/1/10',
+      method: 'get',
       params: {
         page: pagination.page,
         pageSize: pagination.pageSize
@@ -21,7 +21,7 @@ export default {
    */
   submit: function submit(dto) {
     return request({
-      url: '/system/user/submit',
+      url: '/iam/user/submit',
       method: 'post',
       data: dto
     })
@@ -32,7 +32,7 @@ export default {
    */
   remove: function remove(rows) {
     return request({
-      url: '/system/user/remove',
+      url: '/iam/user/remove',
       method: 'post',
       data: rows
     })
@@ -43,7 +43,7 @@ export default {
    */
   queryById: function queryById(id) {
     return request({
-      url: '/system/user/queryById',
+      url: '/iam/user/queryById',
       method: 'get',
       params: {
         'id': id

@@ -10,8 +10,11 @@
       <el-form-item label="表名" prop="roleName">
         <el-input v-model="dto.tableName" class="filter-item" placeholder="sys_user" />
       </el-form-item>
-      <el-form-item label="dto名称" prop="roleName">
-        <el-input v-model="dto.targetName" class="filter-item" placeholder="SysUser" />
+      <el-form-item label="entity名称" prop="roleName">
+        <el-input v-model="dto.entityName" class="filter-item" placeholder="SysUser" />
+      </el-form-item>
+      <el-form-item label="作者" prop="roleName">
+        <el-input v-model="dto.authorName" class="filter-item" placeholder="SysUser" />
       </el-form-item>
     </el-form>
     <div slot="footer" class="dialog-footer">

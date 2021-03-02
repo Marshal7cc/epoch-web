@@ -58,6 +58,7 @@ service.interceptors.response.use((response) => {
         })
         break
       case 401:
+        debugger
         Message({
           message: '很抱歉，认证已失效，请重新登录',
           type: 'error',

@@ -10,6 +10,7 @@ export default {
    */
   login: function(authenticationInfo) {
     authenticationInfo.grant_type = 'password'
+    authenticationInfo.grant_source = 'web'
     return request({
       headers: {
         'Authorization': basicAuthorization
