@@ -2,12 +2,12 @@
   <div class="app-container">
     <div class="filter-container">
       <el-input
-        v-model="queryParam.roleCode"
+        v-model="queryParam.code"
         :placeholder="$t('epoch.role-code')"
         style="width: 150px;"
         class="filter-item"
       />
-      <el-input v-model="queryParam.roleName" :placeholder="$t('epoch.role-name')" style="width: 150px;" class="filter-item" />
+      <el-input v-model="queryParam.name" :placeholder="$t('epoch.role-name')" style="width: 150px;" class="filter-item" />
 
       <el-button plain class="filter-item" type="primary" icon="el-icon-search" @click="query">
         {{ $t('epoch.btn-search') }}
@@ -38,17 +38,17 @@
       />
       <el-table-column :label="$t('epoch.role-code')" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.roleCode }}</span>
+          <span>{{ scope.row.code }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('epoch.role-name')" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.roleName }}</span>
+          <span>{{ scope.row.name }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('epoch.common-description')" align="center">
         <template slot-scope="scope">
-          <span>{{ scope.row.roleDescription }}</span>
+          <span>{{ scope.row.description }}</span>
         </template>
       </el-table-column>
       <el-table-column :label="$t('epoch.common-operation')" align="center">
@@ -74,14 +74,14 @@
         label-width="170px"
         style="width: 400px; margin-left:50px;"
       >
-        <el-form-item :label="$t('epoch.role-code')" prop="roleCode">
-          <el-input v-model="dto.roleCode" class="filter-item" :placeholder="$t('epoch.role-code')" />
+        <el-form-item :label="$t('epoch.role-code')" prop="code">
+          <el-input v-model="dto.code" class="filter-item" :placeholder="$t('epoch.role-code')" />
         </el-form-item>
-        <el-form-item :label="$t('epoch.role-name')" prop="roleName">
-          <el-input v-model="dto.roleName" class="filter-item" :placeholder="$t('epoch.role-name')" />
+        <el-form-item :label="$t('epoch.role-name')" prop="name">
+          <el-input v-model="dto.name" class="filter-item" :placeholder="$t('epoch.role-name')" />
         </el-form-item>
         <el-form-item :label="$t('epoch.common-description')" prop="description">
-          <el-input v-model="dto.roleDescription" class="filter-item" :placeholder="$t('epoch.common-description')" />
+          <el-input v-model="dto.description" class="filter-item" :placeholder="$t('epoch.common-description')" />
         </el-form-item>
       </el-form>
       <div slot="footer" class="dialog-footer">

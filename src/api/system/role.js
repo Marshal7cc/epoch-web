@@ -8,10 +8,6 @@ export default {
     return request({
       url: '/iam/roles/1/10',
       method: 'get',
-      params: {
-        page: pagination.page,
-        pageSize: pagination.pageSize
-      },
       data: queryParam
     })
   },
@@ -21,7 +17,7 @@ export default {
    */
   submit: function submit(dto) {
     return request({
-      url: '/iam/roles/submit',
+      url: '/iam/roles',
       method: 'post',
       data: dto
     })
